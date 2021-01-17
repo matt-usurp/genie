@@ -1,6 +1,6 @@
 import { Container } from './types';
 
-export type ServiceContainerCache<
+type ServiceContainerCache<
   ParameterMapping extends Container.Parameter.Mapping,
   ServiceMapping extends Container.Service.Mapping,
 > = {
@@ -8,7 +8,7 @@ export type ServiceContainerCache<
   services: Partial<ServiceMapping>;
 };
 
-export class RawServiceContainer<
+export class PublicServiceContainer<
   ServiceMapping extends Container.Service.Mapping,
   ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
   EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
@@ -31,7 +31,7 @@ export class RawServiceContainer<
     });
   }
 
-  private service<K extends keyof ServiceMapping>(service: K): ServiceMapping[K] {
+  public service<K extends keyof ServiceMapping>(service: K): ServiceMapping[K] {
     const cached = this.caches.services[service];
 
     if (cached !== undefined) {
@@ -57,7 +57,7 @@ export class RawServiceContainer<
     return this.caches.services[service] = resolved;
   }
 
-  private parameter<K extends keyof ParameterMapping>(parameter: K): ParameterMapping[K] {
+  public parameter<K extends keyof ParameterMapping>(parameter: K): ParameterMapping[K] {
     const cached = this.caches.parameters[parameter];
 
     if (cached !== undefined) {
@@ -83,7 +83,7 @@ export class RawServiceContainer<
     return this.caches.parameters[parameter] = resolved;
   }
 
-  private environment<K extends keyof EnvironmentMapping>(environment: K): EnvironmentMapping[K] {
+  public environment<K extends keyof EnvironmentMapping>(environment: K): EnvironmentMapping[K] {
     const value = this.env[environment];
 
     if (value === undefined) {
@@ -101,15 +101,21 @@ export class ServiceContainer <
   ServiceMapping extends Container.Service.Mapping,
   ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
   EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
-> extends RawServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping> {
+> {
+  private readonly internal: PublicServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>;
+
   public constructor(
     parameters: Container.Parameter.Definition<ParameterMapping, EnvironmentMapping>,
     services: Container.Service.Definition<ParameterMapping, ServiceMapping>,
   ) {
-    super(
+    this.internal = new PublicServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>(
       parameters,
       services,
       process.env as unknown as EnvironmentMapping,
     );
+  }
+
+  public resolve<WrapperFunction>(fn: Container.ContainerAwareFunction<ParameterMapping, ServiceMapping, WrapperFunction>): WrapperFunction {
+    return this.internal.resolve(fn);
   }
 }

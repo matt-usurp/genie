@@ -1,7 +1,7 @@
-import { RawServiceContainer } from './container';
+import { PublicServiceContainer } from './container';
 
 export namespace Container {
-  type VagueContainerConstraint = RawServiceContainer<any, any, any>;
+  type VagueContainerConstraint = PublicServiceContainer<any, any, any>;
 
   export namespace Environment {
     export type Mapping = Record<string, string | undefined>;
@@ -70,7 +70,7 @@ export namespace Container {
     GivenProvider extends VagueContainerConstraint,
     Wrapped,
   > = (
-    GivenProvider extends RawServiceContainer<infer InferServices, infer InferParameters, any>
+    GivenProvider extends PublicServiceContainer<infer InferServices, infer InferParameters, any>
       ? ContainerAwareFunction<
           InferParameters,
           InferServices,
@@ -91,8 +91,8 @@ export namespace Container {
       SubsetParameters extends keyof GivenProvider['parameters'],
       SubsetServices extends keyof GivenProvider['services'],
     > = (
-      GivenProvider extends RawServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironment>
-        ? RawServiceContainer<
+      GivenProvider extends PublicServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironment>
+        ? PublicServiceContainer<
             Pick<InferServices, SubsetServices>,
             Pick<InferParameters, SubsetParameters>,
             InferEnvironment
