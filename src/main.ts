@@ -1,2 +1,2 @@
-export { Container } from './container/definition';
-export { ServiceContainer } from './container/service';
+export { Container } from './container/types';
+export { ServiceContainer } from './container/container';
