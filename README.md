@@ -1,4 +1,4 @@
-# Remedy
+# Genie
 
 An agnostic service container and parameter store.
 

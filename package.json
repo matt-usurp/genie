@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "name": "@matt-usurp/remedy",
+  "name": "@matt-usurp/genie",
   "description": "A simplistic service container and parameter store.",
   "author": "Matthew Rose <matt.usurp@gmail.com>",
   "license": "MIT",
