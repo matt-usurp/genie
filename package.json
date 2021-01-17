@@ -4,7 +4,7 @@
   "description": "A simplistic service container and parameter store.",
   "author": "Matthew Rose <matt.usurp@gmail.com>",
   "license": "MIT",
-  "main": "index.js",
+  "main": "main.js",
   "homepage": "https://github.com/matt-usurp/remedy#readme",
   "bugs": {
     "url": "https://github.com/matt-usurp/remedy/issues"
