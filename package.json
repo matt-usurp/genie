@@ -5,13 +5,13 @@
   "author": "Matthew Rose <matt.usurp@gmail.com>",
   "license": "MIT",
   "main": "main.js",
-  "homepage": "https://github.com/matt-usurp/remedy#readme",
+  "homepage": "https://github.com/matt-usurp/genie#readme",
   "bugs": {
-    "url": "https://github.com/matt-usurp/remedy/issues"
+    "url": "https://github.com/matt-usurp/genie/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/matt-usurp/remedy.git"
+    "url": "git+https://github.com/matt-usurp/genie.git"
   },
   "keywords": [
     "service-container"
