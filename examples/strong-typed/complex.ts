@@ -64,8 +64,10 @@ const services: Container.Service.Definition<ServiceParameters, Services> = {
   },
 };
 
-type MyContainer = ServiceContainer<Services, ServiceParameters, EnvironmentVariables>;
-const container: MyContainer = new ServiceContainer(parameters, services);
+type MyContainerInstance = ServiceContainer<Services, ServiceParameters, EnvironmentVariables>;
+type MyContainer = Container.Definition.Make<MyContainerInstance>;
+
+const container: MyContainerInstance = new ServiceContainer(parameters, services);
 
 type MyHandler = (name: string) => { alive: boolean; greeting?: string; };
 type MyHandlerContainerAware = Container.MakeAware<MyContainer, MyHandler>;

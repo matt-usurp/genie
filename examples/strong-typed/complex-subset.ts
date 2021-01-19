@@ -8,9 +8,10 @@ type MyParameters = {
   'title.sir': string;
 };
 
-type MyContainer = ServiceContainer<MyServices, MyParameters>;
+type MyContainerInstance = ServiceContainer<MyServices, MyParameters>;
+type MyContainer = Container.Definition.Make<MyContainerInstance>;
 
-const container: MyContainer = new ServiceContainer(
+const container: MyContainerInstance = new ServiceContainer(
   {
     'title.sir': () => 'Sir',
   },

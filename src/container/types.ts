@@ -1,7 +1,30 @@
-import { PublicServiceContainer } from './container';
+import { PublicServiceContainer, ServiceContainer } from './container';
 
 export namespace Container {
-  type VagueContainerConstraint = PublicServiceContainer<any, any, any>;
+
+  export namespace Definition {
+    export type VagueKind = Definition<any, any, any>;
+
+    export type Definition<
+      ServiceMapping extends Container.Service.Mapping,
+      ParameterMapping extends Container.Parameter.Mapping,
+      EnvironmentMapping extends Container.Environment.Mapping,
+    > = {
+      services: ServiceMapping;
+      parameters: ParameterMapping;
+      envars: EnvironmentMapping;
+    };
+
+    export type Make<GivenContainer> = (
+      GivenContainer extends ServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironmentVariables>
+        ? Definition<InferServices, InferParameters, InferEnvironmentVariables>
+        : (
+          GivenContainer extends PublicServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironmentVariables>
+            ? Definition<InferServices, InferParameters, InferEnvironmentVariables>
+            : never
+        )
+    );
+  }
 
   export namespace Environment {
     export type Mapping = Record<string, string | undefined>;
@@ -67,10 +90,10 @@ export namespace Container {
   }
 
   export type MakeAware<
-    GivenProvider extends VagueContainerConstraint,
+    GivenDefinition extends Definition.VagueKind,
     Wrapped,
   > = (
-    GivenProvider extends PublicServiceContainer<infer InferServices, infer InferParameters, any>
+    GivenDefinition extends Definition.Definition<infer InferServices, infer InferParameters, any>
       ? ContainerAwareFunction<
           InferParameters,
           InferServices,
@@ -87,12 +110,12 @@ export namespace Container {
 
   export namespace Subset {
     export type Compose<
-      GivenProvider extends VagueContainerConstraint,
-      SubsetParameters extends keyof GivenProvider['parameters'],
-      SubsetServices extends keyof GivenProvider['services'],
+      GivenDefinition extends Definition.VagueKind,
+      SubsetParameters extends keyof GivenDefinition['parameters'],
+      SubsetServices extends keyof GivenDefinition['services'],
     > = (
-      GivenProvider extends PublicServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironment>
-        ? PublicServiceContainer<
+      GivenDefinition extends Definition.Definition<infer InferServices, infer InferParameters, infer InferEnvironment>
+        ? Definition.Definition<
             Pick<InferServices, SubsetServices>,
             Pick<InferParameters, SubsetParameters>,
             InferEnvironment
@@ -105,13 +128,13 @@ export namespace Container {
     export type NoServices = never;
 
     export type Services<
-      GivenProvider extends VagueContainerConstraint,
-      SubsetServices extends keyof GivenProvider['services'],
+      GivenDefinition extends Definition.VagueKind,
+      SubsetServices extends keyof GivenDefinition['services'],
     > = SubsetServices;
 
     export type Parameters<
-      GivenProvider extends VagueContainerConstraint,
-      SubsetParameters extends keyof GivenProvider['parameters'],
+      GivenDefinition extends Definition.VagueKind,
+      SubsetParameters extends keyof GivenDefinition['parameters'],
     > = SubsetParameters;
   }
 }
