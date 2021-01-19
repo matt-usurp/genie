@@ -50,48 +50,58 @@ test:
 # --
 
 .PHONY: \
-	build \
-	build.clean \
-	build.setup \
-	build.compile \
-	build.compile.verify \
-	build.package \
-	build.package.verify
+	build
 
-build: \
-	build.clean \
-	build.setup \
-	build.compile \
-	build.compile.verify \
-	build.package \
-	build.package.verify
+build:
+	npx tsc
 
-build.clean:
+# --
+# -- Package Build
+# --
+
+.PHONY: \
+	package.build \
+	package.build.clean \
+	package.build.setup \
+	package.build.compile \
+	package.build.compile.verify \
+	package.build.package \
+	package.build.package.verify
+
+package.build: \
+	package.build.clean \
+	package.build.setup \
+	package.build.compile \
+	package.build.compile.verify \
+	package.build.package \
+	package.build.package.verify
+
+package.build.clean:
 	rm -rf build/workspace
 
-build.setup:
+package.build.setup:
 	mkdir -p build/workspace
 
-build.compile:
+package.build.compile:
 	npx tsc -p build/tsconfig.json
 
 	find build/workspace -type f -name "*.spec.js" -delete
 	find build/workspace -type f -name "*.spec.js.map" -delete
 	find build/workspace -type f -name "*.spec.d.ts" -delete
 
-build.compile.verify:
+package.build.compile.verify:
 	test ! -f build/workspace/container/container.spec.js
 
 	test -f build/workspace/container/container.js
 	test -f build/workspace/main.js
 
-build.package:
+package.build.package:
 	cp package.json build/workspace/package.json
 	cp package-lock.json build/workspace/package-lock.json
 
 	cp README.md build/workspace/README.md
 
-build.package.verify:
+package.build.package.verify:
 	test -f build/workspace/package.json
 	test -f build/workspace/package-lock.json
 
@@ -102,7 +112,13 @@ build.package.verify:
 # --
 
 .PHONY: \
-	publish.dry
+	package \
+	package.publish.verify
 
-publish.dry:
-	npm publish "./build/workspace" --dry-run
+package: \
+	package.build \
+	package.publish.verify
+
+package.publish.verify:
+	npm publish "./build/workspace" \
+		--dry-run
