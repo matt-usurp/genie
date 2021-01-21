@@ -1,19 +1,16 @@
 import { Container } from './core';
 
-type ContainerCache<
-  ParameterMapping extends Container.Parameter.Mapping,
-  ServiceMapping extends Container.Service.Mapping,
-> = {
-  parameters: Partial<ParameterMapping>;
-  services: Partial<ServiceMapping>;
+type ContainerCache = {
+  parameters: Partial<Container.Parameter.Mapping>;
+  services: Partial<Container.Service.Mapping>;
 };
 
 export class InternalContainer<
   ServiceMapping extends Container.Service.Mapping,
-  ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
-  EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
+  ParameterMapping extends Container.Parameter.Mapping,
+  EnvironmentMapping extends Container.Environment.Mapping,
 > {
-  private readonly caches: ContainerCache<ParameterMapping, ServiceMapping> = {
+  private readonly caches: ContainerCache = {
     parameters: {},
     services: {},
   };
@@ -24,20 +21,28 @@ export class InternalContainer<
     public readonly env: EnvironmentMapping,
   ) {}
 
-  public resolve<WrapperFunction>(fn: Container.ContainerAwareFunction<ParameterMapping, ServiceMapping, WrapperFunction>): WrapperFunction {
+  public resolve<
+    WrapperFunction,
+    GivenFunction extends Container.ContainerAwareFunction<UnknownParameterMapping, UnknownServiceMapping, WrapperFunction>,
+    UnknownParameterMapping extends ParameterMapping,
+    UnknownServiceMapping extends ServiceMapping,
+  >(fn: GivenFunction): WrapperFunction {
     return fn({
       parameter: this.parameter.bind(this),
       service: this.service.bind(this),
     });
   }
 
-  public service<K extends keyof ServiceMapping>(service: K): ServiceMapping[K] {
+  public service<
+    UnknownServiceMapping extends ServiceMapping,
+    K extends keyof ServiceMapping
+  >(service: K): UnknownServiceMapping[K] {
     const cached = this.caches.services[service];
 
     if (cached !== undefined) {
       // Seems that negative checks on undefined do not removed undefined from the type.
       // This assertion should be considered safe.
-      return cached as ServiceMapping[K];
+      return cached as UnknownServiceMapping[K];
     }
 
     const resolver = this.services[service];
@@ -54,16 +59,21 @@ export class InternalContainer<
       service: this.service.bind(this),
     });
 
-    return this.caches.services[service] = resolved;
+    this.caches.services[service] = resolved;
+
+    return resolved as unknown as UnknownServiceMapping[K];
   }
 
-  public parameter<K extends keyof ParameterMapping>(parameter: K): ParameterMapping[K] {
+  public parameter<
+    UnknownParameterMapping extends ParameterMapping,
+    K extends keyof UnknownParameterMapping,
+  >(parameter: K): UnknownParameterMapping[K] {
     const cached = this.caches.parameters[parameter];
 
     if (cached !== undefined) {
       // Seems that negative checks on undefined do not removed undefined from the type.
       // This assertion should be considered safe.
-      return cached as ParameterMapping[K];
+      return cached as UnknownParameterMapping[K];
     }
 
     const resolver = this.parameters[parameter];
@@ -80,7 +90,9 @@ export class InternalContainer<
       parameter: this.parameter.bind(this),
     });
 
-    return this.caches.parameters[parameter] = resolved;
+    this.caches.parameters[parameter] = resolved;
+
+    return resolved as unknown as UnknownParameterMapping[K];
   }
 
   public environment<K extends keyof EnvironmentMapping>(environment: K): EnvironmentMapping[K] {
@@ -99,8 +111,8 @@ export class InternalContainer<
 
 export class ServiceContainer <
   ServiceMapping extends Container.Service.Mapping,
-  ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
-  EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
+  ParameterMapping extends Container.Parameter.Mapping,
+  EnvironmentMapping extends Container.Environment.Mapping,
 > {
   private readonly internal: InternalContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>;
 
