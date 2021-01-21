@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/matt-usurp/genie/compare/v0.1.1...v0.1.2) (2021-01-21)
+
+
+### Features
+
+* reversed constraints on resolve function ([02a5ceb](https://github.com/matt-usurp/genie/commit/02a5cebe2b459f1305454f6f0c9bd7efe224077e))
+
+
+### Bug Fixes
+
+* compile for node only ([4969cd7](https://github.com/matt-usurp/genie/commit/4969cd7c14a7aa2eb4e8e20da708af46c1fbb866))
+
 ### 0.1.1 (2021-01-19)
 
 

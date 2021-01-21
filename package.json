@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "@matt-usurp/genie",
   "description": "A simplistic service container and parameter store.",
   "author": "Matthew Rose <matt.usurp@gmail.com>",
