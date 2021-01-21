@@ -1,4 +1,4 @@
-import { InternalContainer, ServiceContainer } from './container';
+import { InternalContainer, ServiceContainer } from './internal';
 
 export class Container<
   ServiceMapping extends Container.Service.Mapping,

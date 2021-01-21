@@ -1,5 +1,5 @@
 import { Container } from '../main';
-import { InternalContainer } from './container';
+import { InternalContainer } from './internal';
 
 type TestEnvironmentMapping = {
   ENV_FOO: string;
@@ -37,7 +37,7 @@ const services: Container.Service.Definition<TestParameterMapping, TestServiceMa
 
 const ignore = {} as any;
 
-describe('src/container/container.ts', (): void => {
+describe('src/container/internal.ts', (): void => {
   describe('InternalContainer', () => {
     describe('environment', (): void => {
       it('with valid environment map, return value', async(): Promise<void> => {
