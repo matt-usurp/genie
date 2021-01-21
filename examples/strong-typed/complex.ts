@@ -1,4 +1,4 @@
-import { Container, ServiceContainer } from '../../src/main';
+import { Container } from '../../src/main';
 
 /**
  * In this example the environment provides some variables to the container.
@@ -64,10 +64,10 @@ const services: Container.Service.Definition<ServiceParameters, Services> = {
   },
 };
 
-type MyContainerInstance = ServiceContainer<Services, ServiceParameters, EnvironmentVariables>;
+type MyContainerInstance = Container<Services, ServiceParameters, EnvironmentVariables>;
 type MyContainer = Container.Definition.Make<MyContainerInstance>;
 
-const container: MyContainerInstance = new ServiceContainer(parameters, services);
+const container: MyContainerInstance = new Container(parameters, services);
 
 type MyHandler = (name: string) => { alive: boolean; greeting?: string; };
 type MyHandlerContainerAware = Container.MakeAware<MyContainer, MyHandler>;

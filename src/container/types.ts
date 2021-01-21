@@ -1,5 +1,11 @@
 import { PublicServiceContainer, ServiceContainer } from './container';
 
+export class Container<
+  ServiceMapping extends Container.Service.Mapping,
+  ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
+  EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
+> extends ServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping> {}
+
 export namespace Container {
 
   export namespace Definition {

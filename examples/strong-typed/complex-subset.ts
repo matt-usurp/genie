@@ -1,4 +1,4 @@
-import { Container, ServiceContainer } from '../../src/main';
+import { Container } from '../../src/main';
 
 type MyServices = {
   'name.knighted': (input: string) => string;
@@ -8,10 +8,10 @@ type MyParameters = {
   'title.sir': string;
 };
 
-type MyContainerInstance = ServiceContainer<MyServices, MyParameters>;
+type MyContainerInstance = Container<MyServices, MyParameters>;
 type MyContainer = Container.Definition.Make<MyContainerInstance>;
 
-const container: MyContainerInstance = new ServiceContainer(
+const container: MyContainerInstance = new Container(
   {
     'title.sir': () => 'Sir',
   },
