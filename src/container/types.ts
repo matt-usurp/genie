@@ -7,21 +7,20 @@ export class Container<
 > extends ServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping> {}
 
 export namespace Container {
+  export type Definition<
+    ServiceMapping extends Container.Service.Mapping,
+    ParameterMapping extends Container.Parameter.Mapping,
+    EnvironmentMapping extends Container.Environment.Mapping,
+  > = {
+    services: ServiceMapping;
+    parameters: ParameterMapping;
+    envars: EnvironmentMapping;
+  };
 
   export namespace Definition {
     export type VagueKind = Definition<any, any, any>;
 
-    export type Definition<
-      ServiceMapping extends Container.Service.Mapping,
-      ParameterMapping extends Container.Parameter.Mapping,
-      EnvironmentMapping extends Container.Environment.Mapping,
-    > = {
-      services: ServiceMapping;
-      parameters: ParameterMapping;
-      envars: EnvironmentMapping;
-    };
-
-    export type Make<GivenContainer> = (
+    export type From<GivenContainer> = (
       GivenContainer extends ServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironmentVariables>
         ? Definition<InferServices, InferParameters, InferEnvironmentVariables>
         : (
@@ -99,7 +98,7 @@ export namespace Container {
     GivenDefinition extends Definition.VagueKind,
     Wrapped,
   > = (
-    GivenDefinition extends Definition.Definition<infer InferServices, infer InferParameters, any>
+    GivenDefinition extends Definition<infer InferServices, infer InferParameters, any>
       ? ContainerAwareFunction<
           InferParameters,
           InferServices,
@@ -120,8 +119,8 @@ export namespace Container {
       SubsetParameters extends keyof GivenDefinition['parameters'],
       SubsetServices extends keyof GivenDefinition['services'],
     > = (
-      GivenDefinition extends Definition.Definition<infer InferServices, infer InferParameters, infer InferEnvironment>
-        ? Definition.Definition<
+      GivenDefinition extends Definition<infer InferServices, infer InferParameters, infer InferEnvironment>
+        ? Definition<
             Pick<InferServices, SubsetServices>,
             Pick<InferParameters, SubsetParameters>,
             InferEnvironment

@@ -9,7 +9,7 @@ type MyParameters = {
 };
 
 type MyContainerInstance = Container<MyServices, MyParameters>;
-type MyContainer = Container.Definition.Make<MyContainerInstance>;
+type MyContainer = Container.Definition.From<MyContainerInstance>;
 
 const container: MyContainerInstance = new Container(
   {

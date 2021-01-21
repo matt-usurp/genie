@@ -65,7 +65,7 @@ const services: Container.Service.Definition<ServiceParameters, Services> = {
 };
 
 type MyContainerInstance = Container<Services, ServiceParameters, EnvironmentVariables>;
-type MyContainer = Container.Definition.Make<MyContainerInstance>;
+type MyContainer = Container.Definition.From<MyContainerInstance>;
 
 const container: MyContainerInstance = new Container(parameters, services);
 
