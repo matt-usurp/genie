@@ -1,1 +1,1 @@
-export { Container } from './container/types';
+export { Container } from './container/core';

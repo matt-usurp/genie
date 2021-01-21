@@ -1,4 +1,4 @@
-import { Container } from './types';
+import { Container } from './core';
 
 type ContainerCache<
   ParameterMapping extends Container.Parameter.Mapping,
