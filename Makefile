@@ -128,9 +128,11 @@ package.build.compile:
 	find build/workspace -type f -name "*.spec.d.ts" -delete
 
 package.build.compile.verify:
-	test ! -f build/workspace/container/container.spec.js
+	test ! -f build/workspace/container/core.spec.js
+	test ! -f build/workspace/container/internal.spec.js
 
-	test -f build/workspace/container/container.js
+	test -f build/workspace/container/core.js
+	test -f build/workspace/container/internal.js
 	test -f build/workspace/main.js
 
 package.build.package:
