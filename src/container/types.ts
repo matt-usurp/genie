@@ -1,4 +1,4 @@
-import { PublicServiceContainer, ServiceContainer } from './container';
+import { InternalContainer, ServiceContainer } from './container';
 
 export class Container<
   ServiceMapping extends Container.Service.Mapping,
@@ -24,7 +24,7 @@ export namespace Container {
       GivenContainer extends ServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironmentVariables>
         ? Definition<InferServices, InferParameters, InferEnvironmentVariables>
         : (
-          GivenContainer extends PublicServiceContainer<infer InferServices, infer InferParameters, infer InferEnvironmentVariables>
+          GivenContainer extends InternalContainer<infer InferServices, infer InferParameters, infer InferEnvironmentVariables>
             ? Definition<InferServices, InferParameters, InferEnvironmentVariables>
             : never
         )

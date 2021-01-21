@@ -1,5 +1,5 @@
 import { Container } from '../main';
-import { PublicServiceContainer } from './container';
+import { InternalContainer } from './container';
 
 type TestEnvironmentMapping = {
   ENV_FOO: string;
@@ -38,10 +38,10 @@ const services: Container.Service.Definition<TestParameterMapping, TestServiceMa
 const ignore = {} as any;
 
 describe('src/container/container.ts', (): void => {
-  describe('PublicServiceContainer', () => {
+  describe('InternalContainer', () => {
     describe('environment', (): void => {
       it('with valid environment map, return value', async(): Promise<void> => {
-        const container = new PublicServiceContainer(ignore, ignore, env);
+        const container = new InternalContainer(ignore, ignore, env);
 
         expect(container.environment('ENV_FOO')).toEqual('assert:environment:foo');
         expect(container.environment('ENV_BAR')).toEqual('assert:environment:bar');
@@ -50,7 +50,7 @@ describe('src/container/container.ts', (): void => {
 
     describe('parameter', (): void => {
       it('with valid parameter map, return value', async(): Promise<void> => {
-        const container = new PublicServiceContainer(params, ignore, env);
+        const container = new InternalContainer(params, ignore, env);
 
         expect(container.parameter('param.foo')).toEqual('assert:environment:foo');
         expect(container.parameter('param.bar')).toEqual('assert:parameter(assert:environment:bar)');
@@ -60,7 +60,7 @@ describe('src/container/container.ts', (): void => {
 
     describe('service', (): void => {
       it('with valid service map, return value', async(): Promise<void> => {
-        const container = new PublicServiceContainer(params, services, env);
+        const container = new InternalContainer(params, services, env);
 
         expect(container.service('bazzer')(10000)).toBe(11234);
         expect(container.service('foobar')()).toBe('assert:service(assert:environment:foo && assert:parameter(assert:environment:bar))');

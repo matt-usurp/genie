@@ -1,6 +1,6 @@
 import { Container } from './types';
 
-type ServiceContainerCache<
+type ContainerCache<
   ParameterMapping extends Container.Parameter.Mapping,
   ServiceMapping extends Container.Service.Mapping,
 > = {
@@ -8,12 +8,12 @@ type ServiceContainerCache<
   services: Partial<ServiceMapping>;
 };
 
-export class PublicServiceContainer<
+export class InternalContainer<
   ServiceMapping extends Container.Service.Mapping,
   ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
   EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
 > {
-  private readonly caches: ServiceContainerCache<ParameterMapping, ServiceMapping> = {
+  private readonly caches: ContainerCache<ParameterMapping, ServiceMapping> = {
     parameters: {},
     services: {},
   };
@@ -102,13 +102,13 @@ export class ServiceContainer <
   ParameterMapping extends Container.Parameter.Mapping = Container.Parameter.Mapping,
   EnvironmentMapping extends Container.Environment.Mapping = Container.Environment.Mapping,
 > {
-  private readonly internal: PublicServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>;
+  private readonly internal: InternalContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>;
 
   public constructor(
     parameters: Container.Parameter.Definition<ParameterMapping, EnvironmentMapping>,
     services: Container.Service.Definition<ParameterMapping, ServiceMapping>,
   ) {
-    this.internal = new PublicServiceContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>(
+    this.internal = new InternalContainer<ServiceMapping, ParameterMapping, EnvironmentMapping>(
       parameters,
       services,
       process.env as unknown as EnvironmentMapping,
