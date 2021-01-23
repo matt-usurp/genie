@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/matt-usurp/genie/compare/v0.1.2...v0.1.3) (2021-01-23)
+
+
+### Bug Fixes
+
+* **lambda:** node 10 compatibility so can be used with aws-lambda ([0f2c4dc](https://github.com/matt-usurp/genie/commit/0f2c4dc381ed70ff997da2ccb44eb9bd3d9a4b43))
+
 ### [0.1.2](https://github.com/matt-usurp/genie/compare/v0.1.1...v0.1.2) (2021-01-21)
 
 
